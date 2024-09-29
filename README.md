@@ -1,6 +1,6 @@
-# base64c
+# Base64C
 
-A faster base64 encoding/decoding library for Python, implemented in C with SSSE3 optimizations.
+A faster base64 encoding/decoding library for Python, implemented in C with SSSE3 and VSX optimizations.
 
 ## Installation
 
@@ -22,5 +22,13 @@ print(b64decode(b64encode(b"Hello, World!")))
 
 MIT
 
+## Performance
 
+* 3-24x faster than the stdlib `base64` module.
+* Performance increases with input size.
+* Tested across different types and sizes of inputs.
 
+<br>
+
+![Table](assets/table.png)
+![Chart](assets/chart.png)
