@@ -1,6 +1,7 @@
 from setuptools import setup, Extension
 import platform
 import sys
+import os
 
 # Determine the appropriate compiler flags based on the platform
 extra_compile_args = ['-O3']  # Optimize for speed using -O3
@@ -19,8 +20,8 @@ if sys.platform == 'darwin':
 
 # Define the C extension module
 base64c_module = Extension(
-    'base64c',
-    sources=['base64c/base64c.c'],  # Assuming the C source is in base64c directory
+    'base64c.base64c',  # This ensures the .so file is placed in the base64c directory
+    sources=[os.path.join('base64c', 'base64c.c')],  # Path to the C source file
     extra_compile_args=extra_compile_args
 )
 
@@ -31,7 +32,7 @@ with open('README.md', 'r', encoding='utf-8') as fh:
 # Setup configuration
 setup(
     name='base64c',
-    version='0.0.1',
+    version='0.0.5',
     description='Fast Base64 encoding/decoding with SSE2 and VSX optimizations',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -39,6 +40,10 @@ setup(
     author_email="oscar.bahamonde@indiecloud.co",
     url='https://github.com/obahamonde/base64c',
     ext_modules=[base64c_module],
+    packages=['base64c'],
+    package_dir={'base64c': 'src/base64c'},  # Specify the directory for Python package
+    include_package_data=True,
+    options={'bdist_wheel': {'universal': True}},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
@@ -54,9 +59,8 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     extras_require={
         'dev': ['pytest', 'pyright', 'isort', 'black'],
-    },
-    packages=['base64c'],  # Include the base64c package directory
+    }
 )

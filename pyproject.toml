@@ -1,32 +1,53 @@
+[project]
+name = "base64c"
+version = "0.0.7"
+description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations"
+authors = [{name = "Oscar Bahamonde", email = "oscar.bahamonde@indiecloud.co"}]
+license = {text = "MIT"}
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: C",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+]
+requires-python = ">=3.8"
+readme = "README.md"
+
 [tool.poetry]
 name = "base64c"
-version = "0.0.1"
+version = "0.0.6"
 description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations"
 authors = ["obahamonde <oscar.bahamonde@indiecloud.co>"]
 readme = "README.md"
+packages = [{include = "base64c", from = "src"}]
+
+[project.optional-dependencies]
+dev = ["pytest", "pyright", "isort", "black","pytest-html","setuptools"]
+
 
 [tool.poetry.dependencies]
-python = "^3.6"
-setuptools = "^75.1.0"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest-html = "^4.1.1"
-pytest = "^8.3.3"
-black = "^24.8.0"
-isort = "^5.13.2"
-pyright = "^1.1.382.post1"
-
-
-[tool.poetry.build]
-script = "build.py"
-generate-setup-file = true
+python = "^3.8"
 
 
 
 [build-system]
-requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
 
-[tool.exclude]
-format = ["wheel"]
+[tool.setuptools]
+packages = ["base64c"]
+package-dir = {"base64c" = "src/base64c"}
+
+[tool.setuptools.package-data]
+base64c = ["*.pyi"]
+
+[tool.setuptools_scm]
