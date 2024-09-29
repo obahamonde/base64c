@@ -8,8 +8,7 @@ RUN pip install poetry
 
 RUN poetry install --no-root --no-dev
 
-CMD ["pytest", "--junitxml", "test-results.xml"]
-
+CMD ["pytest", "--html=test_report.html"]	
 
 
 
