@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "base64c"
+version = "0.0.1"
+description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations"
+authors = ["obahamonde <oscar.bahamonde@indiecloud.co>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+setuptools = "^75.1.0"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest-html = "^4.1.1"
+pytest = "^8.3.3"
+black = "^24.8.0"
+isort = "^5.13.2"
+pyright = "^1.1.382.post1"
+
+
+[tool.poetry.build]
+script = "build.py"
+generate-setup-file = true
+
+
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "setuptools", "wheel"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.exclude]
+format = ["wheel"]
