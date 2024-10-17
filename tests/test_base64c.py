@@ -4,17 +4,20 @@ import time
 import os
 import pytest
 import random
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, Literal, TypeAlias
 from string import ascii_letters, digits
 
-# Helper functions
+
+TestKey: TypeAlias = Literal["Small text", "Large text", "Binary data","JPEG image","PNG image","MP3 audio"]
+
+
 def random_text(length: int) -> bytes:
     return "".join(random.choice(ascii_letters + digits) for _ in range(length)).encode()
 
 def random_binary(length: int) -> bytes:
     return os.urandom(length)
 
-def generate_test_data() -> List[Tuple[str, bytes]]:
+def generate_test_data() -> List[Tuple[TestKey, bytes]]:
     return [
         ("Small text", random_text(100)),
         ("Large text", random_text(1000000)),

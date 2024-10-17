@@ -1,49 +1,54 @@
 from setuptools import setup, Extension
 import platform
 import sys
-import os
 
-# Determine the appropriate compiler flags based on the platform
-extra_compile_args = ['-O3']  # Optimize for speed using -O3
+def get_extension_kwargs():
+    extra_compile_args = []
+    extra_link_args = []
+    
+    if sys.platform.startswith('linux'):
+        extra_compile_args.extend(['-std=c99', '-fPIC', '-O3'])
+    elif sys.platform == 'darwin':
+        extra_compile_args.extend(['-std=c99', '-fPIC', '-O3', '-mmacosx-version-min=10.9'])
+        extra_link_args.append('-mmacosx-version-min=10.9')
+    elif sys.platform == 'win32':
+        extra_compile_args = ['/O2']  # Optimize for speed on Windows
+    
+    # Add architecture-specific optimizations
+    if platform.machine().lower() in ('x86_64', 'amd64', 'i386', 'i686'):
+        if sys.platform != 'win32':
+            extra_compile_args.append('-msse2')
+        else:
+            extra_compile_args.append('/arch:SSE2')
+    elif 'arm' in platform.machine().lower():
+        if 'linux' in sys.platform:
+            extra_compile_args.append('-mfpu=neon')
+    elif 'ppc' in platform.machine().lower() or 'powerpc' in platform.machine().lower():
+        if 'linux' in sys.platform:
+            extra_compile_args.extend(['-mvsx', '-mcpu=power8'])
 
-# Add architecture-specific optimizations
-machine = platform.machine().lower()
+    return {
+        'sources': ['src/base64c/base64c.c'],
+        'include_dirs': ['src/base64c'],
+        'extra_compile_args': extra_compile_args,
+        'extra_link_args': extra_link_args,
+    }
 
-if machine in ('x86_64', 'amd64', 'i386', 'i686'):
-    extra_compile_args.append('-msse2')  # Use SSE2 for x86 architectures
-elif 'ppc' in machine or 'powerpc' in machine:
-    extra_compile_args.extend(['-mvsx', '-mcpu=power8'])  # Use VSX for PowerPC architectures
+base64c_module = Extension('base64c.base64c', **get_extension_kwargs())
 
-# For macOS, specify the minimum deployment target
-if sys.platform == 'darwin':
-    extra_compile_args.append('-mmacosx-version-min=10.9')
-
-# Define the C extension module
-base64c_module = Extension(
-    'base64c.base64c',  # This ensures the .so file is placed in the base64c directory
-    sources=[os.path.join('base64c', 'base64c.c')],  # Path to the C source file
-    extra_compile_args=extra_compile_args
-)
-
-# Read the README file for the long description
-with open('README.md', 'r', encoding='utf-8') as fh:
-    long_description = fh.read()
-
-# Setup configuration
 setup(
     name='base64c',
-    version='0.0.5',
+    version='0.0.9',
     description='Fast Base64 encoding/decoding with SSE2 and VSX optimizations',
-    long_description=long_description,
+    long_description=open('README.md', 'r', encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     author='Oscar Bahamonde',
     author_email="oscar.bahamonde@indiecloud.co",
     url='https://github.com/obahamonde/base64c',
     ext_modules=[base64c_module],
     packages=['base64c'],
-    package_dir={'base64c': 'src/base64c'},  # Specify the directory for Python package
+    package_dir={'base64c': 'src/base64c'},
     include_package_data=True,
-    options={'bdist_wheel': {'universal': True}},
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
@@ -55,6 +60,7 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: C',
+        'Operating System :: POSIX :: Linux',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',

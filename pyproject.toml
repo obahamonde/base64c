@@ -1,6 +1,6 @@
 [project]
 name = "base64c"
-version = "0.0.7"
+version = "0.0.9"
 description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations"
 authors = [{name = "Oscar Bahamonde", email = "oscar.bahamonde@indiecloud.co"}]
 license = {text = "MIT"}
@@ -17,27 +17,27 @@ classifiers = [
     "Programming Language :: C",
     "Operating System :: OS Independent",
     "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Utilities",
+    "Topic :: Utilities"
 ]
 requires-python = ">=3.8"
 readme = "README.md"
 
 [tool.poetry]
 name = "base64c"
-version = "0.0.6"
-description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations"
+version = "0.0.9"
+description = "Fast Base64 encoding/decoding with SSE2 and VSX optimizations."
 authors = ["obahamonde <oscar.bahamonde@indiecloud.co>"]
 readme = "README.md"
 packages = [{include = "base64c", from = "src"}]
 
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.3"
+
 [project.optional-dependencies]
 dev = ["pytest", "pyright", "isort", "black","pytest-html","setuptools"]
 
-
 [tool.poetry.dependencies]
 python = "^3.8"
-
-
 
 [build-system]
 requires = ["setuptools>=45", "wheel", "setuptools_scm[toml]>=6.2"]
